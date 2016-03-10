@@ -52,4 +52,13 @@ public class User {
         public void setImage(Attachment image) {
                 this.image = image;
         }
+
+        public String getCorrectName() {
+            if (this.firstName != null && this.lastName != null) {
+                return this.firstName + " " + this.lastName;
+            }
+            else {
+                return this.email;
+            }
+        }
 }

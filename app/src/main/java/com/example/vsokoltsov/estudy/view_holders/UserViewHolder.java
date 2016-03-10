@@ -18,13 +18,13 @@ public class UserViewHolder extends RecyclerView.ViewHolder {
     CardView cv;
     UsersListAdapter adapter;
     private User user;
-    public TextView userEmail;
+    public TextView userName;
     public CircleImageView userAvatar;
 
     public UserViewHolder(View itemView, UsersListAdapter adapter) {
         super(itemView);
         this.adapter = adapter;
-        userEmail = (TextView) itemView.findViewById(R.id.userEmail);
+        userName = (TextView) itemView.findViewById(R.id.userName);
         userAvatar = (CircleImageView) itemView.findViewById(R.id.userAvatar);
     }
 

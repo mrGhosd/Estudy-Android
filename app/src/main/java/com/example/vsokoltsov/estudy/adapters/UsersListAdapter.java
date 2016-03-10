@@ -42,7 +42,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         Drawable emptyUser = activity.getResources().getDrawable(R.drawable.empty_user);
 
         userHolder.setUser(user);
-        userHolder.userEmail.setText(user.getEmail());
+        userHolder.userName.setText(user.getCorrectName());
 
         if (user.getImage() != null) {
             String fullURL = ApiRequester.getInstance().fullResourceURL(user.getImage().getUrl());
