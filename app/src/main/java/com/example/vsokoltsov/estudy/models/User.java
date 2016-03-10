@@ -1,13 +1,19 @@
 package com.example.vsokoltsov.estudy.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by vsokoltsov on 08.03.16.
  */
 
 public class User {
         private String email;
+        @SerializedName("first_name")
         private String firstName;
+        @SerializedName("last_name")
         private String lastName;
+
+        private Attachment image;
 
         public User(String email, String first_name, String last_name ) {
             this.email = email;
@@ -37,5 +43,13 @@ public class User {
 
         public void setLastName(String lastName) {
                 this.lastName = lastName;
+        }
+
+        public Attachment getImage() {
+                return image;
+        }
+
+        public void setImage(Attachment image) {
+                this.image = image;
         }
 }

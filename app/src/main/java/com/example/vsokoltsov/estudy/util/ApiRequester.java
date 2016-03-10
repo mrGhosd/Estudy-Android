@@ -22,7 +22,7 @@ public class ApiRequester {
     }
 
     public String fullResourceURL(String url) {
-        return API_ADDRESS + url;
+        return APP_HOST + url;
     }
 
     public RestAdapter getRestAdapter() {
