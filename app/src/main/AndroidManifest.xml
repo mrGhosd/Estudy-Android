@@ -20,6 +20,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".views.chats.ChatActivity"
+            android:label="Dialogs" >
+        </activity>
+        <activity
+            android:name=".views.authorization.AuthorizationActivity"
+            android:label="Auth" >
+        </activity>
     </application>
 
 </manifest>

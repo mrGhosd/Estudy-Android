@@ -27,6 +27,9 @@ import android.widget.ListView;
 
 import com.example.vsokoltsov.estudy.adapters.NavigationListAdapter;
 import com.example.vsokoltsov.estudy.models.NavigationItem;
+import com.example.vsokoltsov.estudy.views.UsersListActivity;
+import com.example.vsokoltsov.estudy.views.authorization.AuthorizationActivity;
+import com.example.vsokoltsov.estudy.views.chats.ChatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -247,6 +250,24 @@ public class NavigationDrawer extends Fragment {
         NavigationItem navItem = navigationItems.get(position);
         switch(navItem.getTitle()) {
             case "Sign in":
+                Intent authActivity = new Intent(getActivity(), AuthorizationActivity.class);
+                startActivity(authActivity);
+                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                break;
+            case "Sign up":
+                Intent regActivity = new Intent(getActivity(), AuthorizationActivity.class);
+                startActivity(regActivity);
+                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                break;
+            case "Users":
+                Intent usersActivity = new Intent(getActivity(), UsersListActivity.class);
+                startActivity(usersActivity);
+                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                break;
+            case "Messages":
+                Intent chatsActivity = new Intent(getActivity(), ChatActivity.class);
+                startActivity(chatsActivity);
+                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
                 break;
             default: break;
         }
