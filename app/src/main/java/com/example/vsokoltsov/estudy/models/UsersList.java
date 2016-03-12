@@ -20,10 +20,4 @@ public class UsersList {
     public void setUsers(List<User> users) {
         this._users = users;
     }
-
-    public UsersList(List<User> users) {
-        this._users = users;
-    }
-
-    public UsersList() {}
 }

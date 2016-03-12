@@ -18,14 +18,6 @@ public class User {
         @JsonProperty("image")
         private Attachment image;
 
-        public User(String email, String first_name, String last_name ) {
-            this.email = email;
-            this.firstName = first_name;
-            this.lastName = last_name;
-        }
-
-        public User() {}
-
         public String getEmail() {
                 return email;
         }
