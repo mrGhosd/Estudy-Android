@@ -345,11 +345,11 @@ public class NavigationDrawer extends Fragment {
 //        }
 //        else {
 
-            navigationItems.add(new NavigationItem("Sign in"));
-            navigationItems.add(new NavigationItem("Sign up"));
+            navigationItems.add(new NavigationItem(R.drawable.sign_in, "Sign in"));
+            navigationItems.add(new NavigationItem(R.drawable.sign_up,"Sign up"));
 //        }
-        navigationItems.add(new NavigationItem("Users"));
-        navigationItems.add(new NavigationItem("Messages"));
+        navigationItems.add(new NavigationItem(R.drawable.contacts, "Users"));
+        navigationItems.add(new NavigationItem(R.drawable.chats, "Messages"));
         setSignOutButton();
         adapter = new NavigationListAdapter(getActivity(), navigationItems);
         mDrawerListView.setAdapter(adapter);

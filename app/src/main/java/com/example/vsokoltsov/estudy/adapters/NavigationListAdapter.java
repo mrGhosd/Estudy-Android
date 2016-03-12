@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.vsokoltsov.estudy.R;
@@ -97,9 +98,9 @@ public class NavigationListAdapter extends BaseAdapter {
 
     private void configViewForSimilarItem(View convertView) {
         final TextView text = (TextView) convertView.findViewById(R.id.navigationText);
-//        final ImageView image = (ImageView) convertView.findViewById(R.id.navigationImage);
+        final ImageView image = (ImageView) convertView.findViewById(R.id.navigationImage);
 
         text.setText(navigation.getTitle());
-//        image.setImageResource(navigation.getImage());
+        image.setImageResource(navigation.getImage());
     }
 }

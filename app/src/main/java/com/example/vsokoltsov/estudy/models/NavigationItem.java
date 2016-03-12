@@ -11,8 +11,8 @@ public class NavigationItem {
     private User user;
     private Bitmap userImageBitmap;
 
-    public NavigationItem(String title){
-//        this.image = image;
+    public NavigationItem(int image, String title){
+        this.image = image;
         this.title = title;
     }
 
