@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.UsersListAdapter;
@@ -15,9 +16,13 @@ import com.example.vsokoltsov.estudy.util.ApiRequester;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.jackson.JacksonConverterFactory;
 
 
 public class UsersListActivity extends AppCompatActivity  {
@@ -42,18 +47,28 @@ public class UsersListActivity extends AppCompatActivity  {
     }
 
     private void loadUsersList() {
-        UserApi service = api.getRestAdapter().create(UserApi.class);
-        service.loadUsers(new Callback<UsersList>() {
+        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+        // set your desired log level
+        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient httpClient = new OkHttpClient();
+        OkHttpClient httpClientWLogging = new OkHttpClient.Builder().addInterceptor(logging).build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ApiRequester.API_ADDRESS)
+                .addConverterFactory(JacksonConverterFactory.create())
+                .client(httpClientWLogging)
+                .build();
+        UserApi service = retrofit.create(UserApi.class);
+        service.loadUsers().enqueue(new Callback<UsersList>() {
             @Override
-            public void success(UsersList usersList, Response response) {
-                adapter.users = usersList.getUsers();
-                adapter.notifyDataSetChanged();
+            public void onResponse(Call<UsersList> call, Response<UsersList> response) {
+                Log.e("RESP", "SUCCESS");
             }
 
             @Override
-            public void failure(RetrofitError error) {
-
+            public void onFailure(Call<UsersList> call, Throwable t) {
+                Log.e("RESP", "FAILURE");
             }
         });
     }
 }
+

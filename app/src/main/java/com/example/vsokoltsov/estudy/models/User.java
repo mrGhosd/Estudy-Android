@@ -1,16 +1,18 @@
 package com.example.vsokoltsov.estudy.models;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by vsokoltsov on 08.03.16.
  */
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
         private String email;
-        @SerializedName("first_name")
+        @JsonProperty("first_name")
         private String firstName;
-        @SerializedName("last_name")
+        @JsonProperty("last_name")
         private String lastName;
 
         private Attachment image;

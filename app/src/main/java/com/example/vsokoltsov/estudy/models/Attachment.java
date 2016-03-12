@@ -1,14 +1,16 @@
 package com.example.vsokoltsov.estudy.models;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by vsokoltsov on 11.03.16.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Attachment {
-    @SerializedName("attachable_type")
+    @JsonProperty("attachable_type")
     private String attachableType;
-    @SerializedName("attachable_id")
+    @JsonProperty("attachable_id")
     private String attachableId;
     private int id;
     private String type;
