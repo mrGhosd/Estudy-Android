@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_sign_in">Войти</string>
+    <string name="nav_sign_up">Регистрация</string>
+    <string name="nav_sign_out">Выйти</string>
+    <string name="nav_chats">Сообщения</string>
+    <string name="nav_users">Контакты</string>
+</resources>

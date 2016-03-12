@@ -15,7 +15,8 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <fragment android:id="@+id/navigation_drawer"
+    <fragment
+        android:id="@+id/navigation_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"

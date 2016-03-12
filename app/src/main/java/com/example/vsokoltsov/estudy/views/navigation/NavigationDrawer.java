@@ -46,9 +46,9 @@ public class NavigationDrawer extends Fragment {
     private List<NavigationItem> navigationItems = new ArrayList<NavigationItem>();
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
-    private boolean mUserLearnedDrawer;
     private ActionBarDrawerToggle mDrawerToggle;
     private FrameLayout rootView;
+    private Resources resources;
 
     public NavigationDrawer() {
         // Required empty public constructor
@@ -61,8 +61,7 @@ public class NavigationDrawer extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mUserLearnedDrawer = sp.getBoolean("navigation_drawer_learned", false);
+        resources = getResources();
 
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt("selected_navigation_drawer_position");
@@ -214,24 +213,15 @@ public class NavigationDrawer extends Fragment {
                     return;
                 }
 
-                if (!mUserLearnedDrawer) {
-                    // The user manually opened the drawer; store this flag to prevent auto-showing
-                    // the navigation drawer automatically in the future.
-                    mUserLearnedDrawer = true;
-                    SharedPreferences sp = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity());
-                    sp.edit().putBoolean("navigation_drawer_learned", true).apply();
-                }
-
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
 
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
-        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
-            mDrawerLayout.openDrawer(mFragmentContainerView);
-        }
+//        if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
+//            mDrawerLayout.openDrawer(mFragmentContainerView);
+//        }
 
         // Defer code dependent on restoration of previous instance state.
         mDrawerLayout.post(new Runnable() {
@@ -248,116 +238,34 @@ public class NavigationDrawer extends Fragment {
     //NAvigation item actions
     private void navigationItemActions(int position) {
         NavigationItem navItem = navigationItems.get(position);
-        switch(navItem.getTitle()) {
-            case "Sign in":
-                Intent authActivity = new Intent(getActivity(), AuthorizationActivity.class);
-                startActivity(authActivity);
-                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                break;
-            case "Sign up":
-                Intent regActivity = new Intent(getActivity(), AuthorizationActivity.class);
-                startActivity(regActivity);
-                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                break;
-            case "Users":
-                Intent usersActivity = new Intent(getActivity(), UsersListActivity.class);
-                startActivity(usersActivity);
-                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                break;
-            case "Messages":
-                Intent chatsActivity = new Intent(getActivity(), ChatActivity.class);
-                startActivity(chatsActivity);
-                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                break;
-            default: break;
+
+        String signIn = resources.getString(R.string.nav_sign_in);
+        String signUp = resources.getString(R.string.nav_sign_up);
+        String users = resources.getString(R.string.nav_users);
+        String messages = resources.getString(R.string.nav_chats);
+
+        if (navItem.getTitle().equals(signIn)) {
+            Intent authActivity = new Intent(getActivity(), AuthorizationActivity.class);
+            startActivity(authActivity);
+            getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+            return;
+        } else if (navItem.getTitle().equals(signUp)) {
+            Intent regActivity = new Intent(getActivity(), AuthorizationActivity.class);
+            startActivity(regActivity);
+            getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+            return;
+        } else if (navItem.getTitle().equals(users)) {
+            Intent usersActivity = new Intent(getActivity(), UsersListActivity.class);
+            startActivity(usersActivity);
+            getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+            return;
+        } else if (navItem.getTitle().equals(messages)) {
+            Intent chatsActivity = new Intent(getActivity(), ChatActivity.class);
+            startActivity(chatsActivity);
+            getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+            return;
         }
-//        if (mDrawerLayout != null) {
-//            if (authManager.getCurrentUser() != null) {
-//                actionsForSignedInUser(position);
-//            } else {
-//                actionsForUnsignedUser(position);
-//            }
-//        }
-//        else {
-//            if (authManager.getCurrentUser() != null) {
-//                actionsforSignedUserWithTablet(position);
-//            }
-//            else {
-//                actionsforUnsignedUserWithTablet(position);
-//            }
-//        }
-    }
-
-    private void actionsforSignedUserWithTablet(int position) {
-//        Bundle arguments = new Bundle();
-//        android.support.v4.app.FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        switch(position){
-//            case 1:
-//                QuestionsListFragment questionList = new QuestionsListFragment();
-//                fragmentTransaction.replace(R.id.container, questionList);
-//                break;
-//        }
-//
-//        fragmentTransaction.commit();
-    }
-
-    private void actionsforUnsignedUserWithTablet(int position) {
-//        Bundle arguments = new Bundle();
-//        android.support.v4.app.FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        switch(position){
-//            case 0:
-//                arguments.putString("action", "sign_in");
-//                AuthorizationBaseFragment signInView= new AuthorizationBaseFragment();
-//                signInView.setArguments(arguments);
-//                fragmentTransaction.replace(R.id.container, signInView);
-//                break;
-//            case 1:
-//                arguments.putString("action", "sign_up");
-//                AuthorizationBaseFragment signUpView= new AuthorizationBaseFragment();
-//                signUpView.setArguments(arguments);
-//                fragmentTransaction.replace(R.id.container, signUpView);
-//                break;
-//            case 2:
-//                QuestionsListFragment questionList = new QuestionsListFragment();
-//                fragmentTransaction.replace(R.id.container, questionList);
-//                break;
-//        }
-//
-//        fragmentTransaction.commit();
-    }
-
-    private void actionsForSignedInUser(int position) {
-//        switch(position){
-//            case 1:
-//                Intent questionsIntent = new Intent(getActivity(), QuestionsListActivity.class);
-//                startActivity(questionsIntent);
-//                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-//                break;
-//        }
-    }
-
-    private void actionsForUnsignedUser(int position) {
-//        switch(position){
-//            case 0:
-//                Intent detailIntent = new Intent(getActivity(), AuthorizationActivity.class);
-//                detailIntent.putExtra("action", "sign_in");
-//                startActivity(detailIntent);
-//                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-//                break;
-//            case 1:
-//                Intent regIntent = new Intent(getActivity(), AuthorizationActivity.class);
-//                regIntent.putExtra("action", "sign_up");
-//                startActivity(regIntent);
-//                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-//                break;
-//            case 2:
-//                Intent questionsIntent = new Intent(getActivity(), QuestionsListActivity.class);
-//                startActivity(questionsIntent);
-//                getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-//                break;
-//        }
+        mDrawerLayout.closeDrawer(rootView);
     }
 
 
@@ -369,11 +277,11 @@ public class NavigationDrawer extends Fragment {
 //        }
 //        else {
 
-            navigationItems.add(new NavigationItem(R.drawable.sign_in, "Sign in"));
-            navigationItems.add(new NavigationItem(R.drawable.sign_up,"Sign up"));
+            navigationItems.add(new NavigationItem(R.drawable.sign_in, resources.getString(R.string.nav_sign_in)));
+            navigationItems.add(new NavigationItem(R.drawable.sign_up, resources.getString(R.string.nav_sign_up)));
 //        }
-        navigationItems.add(new NavigationItem(R.drawable.contacts, "Users"));
-        navigationItems.add(new NavigationItem(R.drawable.chats, "Messages"));
+        navigationItems.add(new NavigationItem(R.drawable.contacts, resources.getString(R.string.nav_users)));
+        navigationItems.add(new NavigationItem(R.drawable.chats, resources.getString(R.string.nav_chats)));
         setSignOutButton();
         adapter = new NavigationListAdapter(getActivity(), navigationItems);
         mDrawerListView.setAdapter(adapter);
