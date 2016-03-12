@@ -1,6 +1,7 @@
 package com.example.vsokoltsov.estudy.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UsersList {
+    @JsonProperty("users")
     private List<User> _users;
 
     public List<User> getUsers() {
@@ -22,4 +24,6 @@ public class UsersList {
     public UsersList(List<User> users) {
         this._users = users;
     }
+
+    public UsersList() {}
 }

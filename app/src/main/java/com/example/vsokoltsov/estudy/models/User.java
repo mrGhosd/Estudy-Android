@@ -9,12 +9,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
+        @JsonProperty("email")
         private String email;
         @JsonProperty("first_name")
         private String firstName;
         @JsonProperty("last_name")
         private String lastName;
-
+        @JsonProperty("image")
         private Attachment image;
 
         public User(String email, String first_name, String last_name ) {
@@ -22,6 +23,8 @@ public class User {
             this.firstName = first_name;
             this.lastName = last_name;
         }
+
+        public User() {}
 
         public String getEmail() {
                 return email;

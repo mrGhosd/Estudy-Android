@@ -50,7 +50,6 @@ public class UsersListActivity extends AppCompatActivity  {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         // set your desired log level
         logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient httpClient = new OkHttpClient();
         OkHttpClient httpClientWLogging = new OkHttpClient.Builder().addInterceptor(logging).build();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(ApiRequester.API_ADDRESS)
@@ -61,12 +60,13 @@ public class UsersListActivity extends AppCompatActivity  {
         service.loadUsers().enqueue(new Callback<UsersList>() {
             @Override
             public void onResponse(Call<UsersList> call, Response<UsersList> response) {
-                Log.e("RESP", "SUCCESS");
+                adapter.users = response.body().getUsers();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFailure(Call<UsersList> call, Throwable t) {
-                Log.e("RESP", "FAILURE");
+                Log.e("RESP", t.getMessage());
             }
         });
     }
