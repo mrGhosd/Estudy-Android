@@ -43,12 +43,7 @@ public class UsersListActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        try {
-            setContentView(R.layout.users_list_activity);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        setContentView(R.layout.users_list_activity);
 
         rv = (RecyclerView) findViewById(R.id.usersList);
         adapter = new UsersListAdapter(users, this);

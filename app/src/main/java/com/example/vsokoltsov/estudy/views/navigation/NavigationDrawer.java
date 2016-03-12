@@ -121,10 +121,7 @@ public class NavigationDrawer extends Fragment {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-        if (mCallbacks != null) {
-//            mCallbacks.onNavigationDrawerItemSelected(position);
-            navigationItemActions(position);
-        }
+        navigationItemActions(position);
     }
     /**
      * This interface must be implemented by activities that contain this
@@ -150,10 +147,10 @@ public class NavigationDrawer extends Fragment {
     }
 
 //    @Override
-//    public void onListItemClick(ListView l, View v, int position, long id) {
-//        /** Invokes the implementation of the method onListFragmentItemClick in the hosting activity */
-//        selectItem(position);
-//    }
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        /** Invokes the implementation of the method onListFragmentItemClick in the hosting activity */
+        selectItem(position);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -247,6 +244,12 @@ public class NavigationDrawer extends Fragment {
 
     //NAvigation item actions
     private void navigationItemActions(int position) {
+        NavigationItem navItem = navigationItems.get(position);
+        switch(navItem.getTitle()) {
+            case "Sign in":
+                break;
+            default: break;
+        }
 //        if (mDrawerLayout != null) {
 //            if (authManager.getCurrentUser() != null) {
 //                actionsForSignedInUser(position);
