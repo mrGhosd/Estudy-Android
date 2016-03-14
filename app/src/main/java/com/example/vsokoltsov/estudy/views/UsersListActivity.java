@@ -15,20 +15,13 @@ import com.example.vsokoltsov.estudy.models.UsersList;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
 import com.example.vsokoltsov.estudy.views.navigation.NavigationDrawer;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.jackson.JacksonConverterFactory;
 
 
 public class UsersListActivity extends ActionBarActivity {
@@ -63,25 +56,7 @@ public class UsersListActivity extends ActionBarActivity {
     }
 
     private void loadUsersList() {
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-        // set your desired log level
-        OkHttpClient client = new OkHttpClient();
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient httpClientWLogging = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
-            @Override
-            public okhttp3.Response intercept(Chain chain) throws IOException {
-                String locale = Locale.getDefault().getLanguage();
-                Request request = chain.request().newBuilder()
-                        .addHeader("locale", locale).build();
-                return chain.proceed(request);
-            }
-        }).build();
-
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ApiRequester.API_ADDRESS)
-                .addConverterFactory(JacksonConverterFactory.create())
-                .client(httpClientWLogging)
-                .build();
+        Retrofit retrofit = api.getRestAdapter();
         UserApi service = retrofit.create(UserApi.class);
         service.loadUsers().enqueue(new Callback<UsersList>() {
             @Override

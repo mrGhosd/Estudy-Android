@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".views.UsersListActivity">
 
+    <FrameLayout
+        android:id="@+id/auth_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
     <fragment android:id="@+id/navigation_drawer"
         android:layout_width="240dp"

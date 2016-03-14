@@ -23,5 +23,10 @@ public class AuthorizationActivity extends ActionBarActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawerFragment = (NavigationDrawer) fragmentManager.findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
+
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        SignInFragment fragment = new SignInFragment();
+        fragmentTransaction.add(R.id.auth_fragment, fragment);
+        fragmentTransaction.commit();
     }
 }
