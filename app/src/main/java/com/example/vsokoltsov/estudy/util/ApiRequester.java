@@ -7,13 +7,14 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
  * Created by vsokoltsov on 11.03.16.
  */
 public class ApiRequester {
-    private static final String APP_HOST = "http://a0e4b993.ngrok.io";
+    private static final String APP_HOST = "http://7325112b.ngrok.io";
     private static final String API_VERSION = "v0/";
     public static final String API_ADDRESS = APP_HOST + "/api/" + API_VERSION;
 
@@ -47,6 +48,7 @@ public class ApiRequester {
         OkHttpClient client = this.okHttpClient();
 
         Retrofit retrofit = new Retrofit.Builder()
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .baseUrl(ApiRequester.API_ADDRESS)
                 .addConverterFactory(JacksonConverterFactory.create())
                 .client(client)

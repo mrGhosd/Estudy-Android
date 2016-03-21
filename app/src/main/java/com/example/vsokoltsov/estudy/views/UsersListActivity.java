@@ -5,7 +5,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.UsersListAdapter;
@@ -18,10 +17,10 @@ import com.example.vsokoltsov.estudy.views.navigation.NavigationDrawer;
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class UsersListActivity extends ActionBarActivity {
@@ -41,14 +40,17 @@ public class UsersListActivity extends ActionBarActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        setUpUI();
+        loadUsersList();
+    }
 
+    private void setUpUI() {
         rv = (RecyclerView) findViewById(R.id.usersList);
         adapter = new UsersListAdapter(users, this);
         rv.setAdapter(adapter);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
-        loadUsersList();
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawerFragment = (NavigationDrawer) fragmentManager.findFragmentById(R.id.navigation_drawer);
@@ -58,18 +60,47 @@ public class UsersListActivity extends ActionBarActivity {
     private void loadUsersList() {
         Retrofit retrofit = api.getRestAdapter();
         UserApi service = retrofit.create(UserApi.class);
-        service.loadUsers().enqueue(new Callback<UsersList>() {
-            @Override
-            public void onResponse(Call<UsersList> call, Response<UsersList> response) {
-                adapter.users = response.body().getUsers();
-                adapter.notifyDataSetChanged();
-            }
+        service.loadUsers()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UsersList>() {
+                    @Override
+                    public void onCompleted() {
 
-            @Override
-            public void onFailure(Call<UsersList> call, Throwable t) {
-                Log.e("RESP", t.getMessage());
-            }
-        });
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(UsersList usersList) {
+                        setUsersList(usersList);
+                    }
+                });
+
+//        service.loadUsers().enqueue(new Callback<UsersList>() {
+//            @Override
+//            public void onResponse(Call<UsersList> call, Response<UsersList> response) {
+//                adapter.users = response.body().getUsers();
+//                adapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<UsersList> call, Throwable t) {
+//                Log.e("RESP", t.getMessage());
+//            }
+//        });
+    }
+
+    private void setUsersList(UsersList users) {
+        adapter.users = users.getUsers();
+        adapter.notifyDataSetChanged();
+    }
+
+    private void handleError(Throwable error) {
+
     }
 }
 
