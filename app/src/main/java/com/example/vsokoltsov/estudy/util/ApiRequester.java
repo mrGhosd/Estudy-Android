@@ -42,9 +42,13 @@ public class ApiRequester {
             @Override
             public okhttp3.Response intercept(Chain chain) throws IOException {
                 String locale = Locale.getDefault().getLanguage();
-                Request request = chain.request().newBuilder()
-                        .addHeader("locale", locale).build();
-                return chain.proceed(request);
+                String token = getToken();
+                Request.Builder request = chain.request().newBuilder()
+                        .addHeader("locale", locale);
+                if (token != null) {
+                    request.addHeader("estudyauthtoken", token);
+                }
+                return chain.proceed(request.build());
             }
         }).build();
         return httpClientWLogging;
