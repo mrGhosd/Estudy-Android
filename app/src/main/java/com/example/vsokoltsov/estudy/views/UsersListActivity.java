@@ -35,6 +35,7 @@ public class UsersListActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        api.setContext(getApplicationContext());
         try {
             setContentView(R.layout.users_list_activity);
         } catch (Exception e) {
@@ -45,6 +46,7 @@ public class UsersListActivity extends ActionBarActivity {
     }
 
     private void setUpUI() {
+
         rv = (RecyclerView) findViewById(R.id.usersList);
         adapter = new UsersListAdapter(users, this);
         rv.setAdapter(adapter);
@@ -79,19 +81,6 @@ public class UsersListActivity extends ActionBarActivity {
                         setUsersList(usersList);
                     }
                 });
-
-//        service.loadUsers().enqueue(new Callback<UsersList>() {
-//            @Override
-//            public void onResponse(Call<UsersList> call, Response<UsersList> response) {
-//                adapter.users = response.body().getUsers();
-//                adapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<UsersList> call, Throwable t) {
-//                Log.e("RESP", t.getMessage());
-//            }
-//        });
     }
 
     private void setUsersList(UsersList users) {

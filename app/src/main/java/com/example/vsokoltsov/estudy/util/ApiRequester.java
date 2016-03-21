@@ -1,5 +1,8 @@
 package com.example.vsokoltsov.estudy.util;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import java.io.IOException;
 import java.util.Locale;
 
@@ -17,6 +20,9 @@ public class ApiRequester {
     private static final String APP_HOST = "http://7325112b.ngrok.io";
     private static final String API_VERSION = "v0/";
     public static final String API_ADDRESS = APP_HOST + "/api/" + API_VERSION;
+    private static String TOKEN_NAME = "estudytoken";
+    private static String APP_NAME = "estudy";
+    public static Context context;
 
     public static class SingletonHolder {
         public static final ApiRequester HOLDER_INSTANCE = new ApiRequester();
@@ -55,5 +61,21 @@ public class ApiRequester {
                 .build();
         return retrofit;
 
+    }
+
+    public void setToken(String token) {
+        SharedPreferences sPref = this.context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putString(TOKEN_NAME, token);
+        ed.apply();
+    }
+
+    public String getToken() {
+        SharedPreferences sPref = context.getSharedPreferences(APP_NAME, Context.MODE_PRIVATE);
+        return sPref.getString(TOKEN_NAME, null);
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

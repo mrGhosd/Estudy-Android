@@ -15,15 +15,15 @@ import com.example.vsokoltsov.estudy.models.authorization.SignInRequest;
 import com.example.vsokoltsov.estudy.models.authorization.Token;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by vsokoltsov on 14.03.16.
  */
-public class SignInFragment extends Fragment {
+public class SignInFragment extends Fragment implements Button.OnClickListener {
     private EditText emailField;
     private EditText passwordField;
     private Button signInButton;
@@ -41,27 +41,41 @@ public class SignInFragment extends Fragment {
         emailField = (EditText) fragmentView.findViewById(R.id.emailField);
         passwordField= (EditText) fragmentView.findViewById(R.id.passwordField);
         Button signInButton = (Button) fragmentView.findViewById(R.id.signInButton);
-        signInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SignInRequest user = new SignInRequest(emailField.getText().toString(),
-                        passwordField.getText().toString());
-                Retrofit retrofit = ApiRequester.getInstance().getRestAdapter();
-                UserApi service = retrofit.create(UserApi.class);
-                service.signIn(user).enqueue(new Callback<Token>() {
+        signInButton.setOnClickListener(this);
+        return fragmentView;
+    }
+
+    @Override
+    public void onClick(View view) {
+        SignInRequest user = new SignInRequest(emailField.getText().toString(),
+                passwordField.getText().toString());
+        Retrofit retrofit = ApiRequester.getInstance().getRestAdapter();
+        UserApi service = retrofit.create(UserApi.class);
+        service.signIn(user)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Token>() {
                     @Override
-                    public void onResponse(Call<Token> call, Response<Token> response) {
-                        Log.e("Res", response.body().toString() );
+                    public void onCompleted() {
+
                     }
 
                     @Override
-                    public void onFailure(Call<Token> call, Throwable t) {
+                    public void onError(Throwable e) {
 
+                    }
+
+                    @Override
+                    public void onNext(Token token) {
+                        successAuth(token);
                     }
                 });
-//                signIn(v);
-            }
-        });
-        return fragmentView;
+    }
+
+
+    private void  successAuth(Token token) {
+        ApiRequester.getInstance().setToken(token.getToken());
+        Log.e("Res", token.toString());
+        String tok = ApiRequester.getInstance().getToken();
     }
 }

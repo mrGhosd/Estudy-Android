@@ -4,7 +4,6 @@ import com.example.vsokoltsov.estudy.models.UsersList;
 import com.example.vsokoltsov.estudy.models.authorization.SignInRequest;
 import com.example.vsokoltsov.estudy.models.authorization.Token;
 
-import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
@@ -18,5 +17,5 @@ public interface UserApi {
     Observable<UsersList> loadUsers();
 
     @POST("sessions")
-    Call<Token> signIn(@Body SignInRequest user);
+    Observable<Token> signIn(@Body SignInRequest user);
 }

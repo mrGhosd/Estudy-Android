@@ -9,13 +9,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Token {
     @JsonProperty("token")
-    private String value;
+    private String token;
 
-    public String getValue() {
-        return value;
+    public String getToken() {
+        return token;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setToken(String token) {
+        this.token = token;
     }
 }
