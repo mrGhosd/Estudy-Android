@@ -1,21 +1,14 @@
 package com.example.vsokoltsov.estudy.views.navigation;
 
-import com.example.vsokoltsov.estudy.R;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +18,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 
+import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.NavigationListAdapter;
 import com.example.vsokoltsov.estudy.models.NavigationItem;
 import com.example.vsokoltsov.estudy.views.UsersListActivity;
@@ -183,7 +177,6 @@ public class NavigationDrawer extends Fragment {
 
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setBackgroundDrawable(new ColorDrawable(R.color.highlighted_text_material_light));
         actionBar.setHomeAsUpIndicator(R.drawable.menu);
         actionBar.setHomeButtonEnabled(true);
 
