@@ -15,16 +15,14 @@ public class ApplicationBaseActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.application_base_activity_layout);
     }
 
-    protected void showProgress(String msg) {
+    protected void showProgress(int msg) {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             dismissProgress();
         }
 
-        mProgressDialog = ProgressDialog.show(this, getResources().getString(R.string.app_name), msg);
+        mProgressDialog = ProgressDialog.show(this, getResources().getString(R.string.app_name), getResources().getString(msg));
     }
 
     protected void dismissProgress() {

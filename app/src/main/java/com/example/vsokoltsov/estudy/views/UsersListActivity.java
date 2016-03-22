@@ -2,7 +2,6 @@ package com.example.vsokoltsov.estudy.views;
 
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +12,7 @@ import com.example.vsokoltsov.estudy.interfaces.UserApi;
 import com.example.vsokoltsov.estudy.models.User;
 import com.example.vsokoltsov.estudy.models.UsersList;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
+import com.example.vsokoltsov.estudy.util.MaterialProgressBar;
 import com.example.vsokoltsov.estudy.views.base.ApplicationBaseActivity;
 import com.example.vsokoltsov.estudy.views.navigation.NavigationDrawer;
 
@@ -33,19 +33,15 @@ public class UsersListActivity extends ApplicationBaseActivity {
     private ApiRequester api = ApiRequester.getInstance();
     private NavigationDrawer mNavigationDrawerFragment;
     private DrawerLayout drawerLayout;
+    private MaterialProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         api.setContext(getApplicationContext());
-        showProgress("Waiting...");
-        try {
-            setContentView(R.layout.users_list_activity);
-            Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-            setSupportActionBar(mActionBarToolbar);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        setContentView(R.layout.users_list_activity);
+        setToolbar();
+        showProgress(R.string.loader_wait);
         setUpUI();
         loadUsersList();
     }
@@ -59,7 +55,6 @@ public class UsersListActivity extends ApplicationBaseActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         rv.setLayoutManager(llm);
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        ActionBar actionBar = getSupportActionBar();
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawerFragment = (NavigationDrawer) fragmentManager.findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
@@ -96,6 +91,12 @@ public class UsersListActivity extends ApplicationBaseActivity {
 
     private void handleError(Throwable error) {
 
+    }
+
+    private void setToolbar() {
+        Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+        setSupportActionBar(mActionBarToolbar);
+        progressBar = (MaterialProgressBar) findViewById(R.id.header_progress_bar);
     }
 }
 
