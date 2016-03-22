@@ -5,4 +5,6 @@
     <string name="nav_sign_out">Sign out</string>
     <string name="nav_chats">Messages</string>
     <string name="nav_users">Contacts</string>
+
+    <string name="loader_wait">Pleas, wait...</string>
 </resources>

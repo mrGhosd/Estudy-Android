@@ -3,7 +3,6 @@ package com.example.vsokoltsov.estudy.views;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -13,6 +12,7 @@ import com.example.vsokoltsov.estudy.interfaces.UserApi;
 import com.example.vsokoltsov.estudy.models.User;
 import com.example.vsokoltsov.estudy.models.UsersList;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
+import com.example.vsokoltsov.estudy.views.base.ApplicationBaseActivity;
 import com.example.vsokoltsov.estudy.views.navigation.NavigationDrawer;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class UsersListActivity extends ActionBarActivity {
+public class UsersListActivity extends ApplicationBaseActivity {
     private String AppHost = "http://404b76c2.ngrok.io/api/v0";
     private List<User> users = new ArrayList<User>();
     private RecyclerView rv;
@@ -37,6 +37,7 @@ public class UsersListActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         api.setContext(getApplicationContext());
+        showProgress("Waiting...");
         try {
             setContentView(R.layout.users_list_activity);
         } catch (Exception e) {
@@ -56,7 +57,6 @@ public class UsersListActivity extends ActionBarActivity {
         rv.setLayoutManager(llm);
         android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
         ActionBar actionBar = getSupportActionBar();
-//        actionBar.setBackgroundDrawable(new ColorDrawable(R.color.refresh_progress_1));
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawerFragment = (NavigationDrawer) fragmentManager.findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
@@ -71,7 +71,7 @@ public class UsersListActivity extends ActionBarActivity {
                 .subscribe(new Observer<UsersList>() {
                     @Override
                     public void onCompleted() {
-
+                        dismissProgress();
                     }
 
                     @Override
