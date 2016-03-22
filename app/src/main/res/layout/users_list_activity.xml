@@ -6,15 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".views.UsersListActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/usersList"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="@drawable/estudy_bg_2">
+        android:orientation="vertical">
 
-    </android.support.v7.widget.RecyclerView>
+        <include layout="@layout/toolbar" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/usersList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="@drawable/estudy_bg_2" />
+    </LinearLayout>
 
     <fragment
         android:id="@+id/navigation_drawer"

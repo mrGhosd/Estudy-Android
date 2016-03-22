@@ -5,6 +5,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.UsersListAdapter;
@@ -40,6 +41,8 @@ public class UsersListActivity extends ApplicationBaseActivity {
         showProgress("Waiting...");
         try {
             setContentView(R.layout.users_list_activity);
+            Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
+            setSupportActionBar(mActionBarToolbar);
         } catch (Exception e) {
             e.printStackTrace();
         }

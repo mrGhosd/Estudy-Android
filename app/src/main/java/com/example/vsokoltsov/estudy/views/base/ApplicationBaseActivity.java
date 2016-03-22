@@ -15,6 +15,7 @@ public class ApplicationBaseActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.application_base_activity_layout);
     }
 
