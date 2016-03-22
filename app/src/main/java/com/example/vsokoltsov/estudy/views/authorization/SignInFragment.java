@@ -2,7 +2,6 @@ package com.example.vsokoltsov.estudy.views.authorization;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +27,7 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
     private EditText passwordField;
     private Button signInButton;
     private View fragmentView;
+    AuthorizationActivity activity;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +37,8 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        activity = (AuthorizationActivity) getActivity();
+
         fragmentView = inflater.inflate(R.layout.authorization_fragment, container, false);
         emailField = (EditText) fragmentView.findViewById(R.id.emailField);
         passwordField= (EditText) fragmentView.findViewById(R.id.passwordField);
@@ -47,6 +49,7 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        activity.sendAuthRequest();
         SignInRequest user = new SignInRequest(emailField.getText().toString(),
                 passwordField.getText().toString());
         Retrofit retrofit = ApiRequester.getInstance().getRestAdapter();
@@ -75,7 +78,7 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
 
     private void  successAuth(Token token) {
         ApiRequester.getInstance().setToken(token.getToken());
-        Log.e("Res", token.toString());
-        String tok = ApiRequester.getInstance().getToken();
+
+        activity.currentUserRequest();
     }
 }

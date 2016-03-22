@@ -1,6 +1,7 @@
 package com.example.vsokoltsov.estudy.interfaces;
 
 import com.example.vsokoltsov.estudy.models.UsersList;
+import com.example.vsokoltsov.estudy.models.authorization.CurrentUser;
 import com.example.vsokoltsov.estudy.models.authorization.SignInRequest;
 import com.example.vsokoltsov.estudy.models.authorization.Token;
 
@@ -18,4 +19,7 @@ public interface UserApi {
 
     @POST("sessions")
     Observable<Token> signIn(@Body SignInRequest user);
+
+    @GET("sessions/current")
+    Observable<CurrentUser> getCurrentUser();
 }
