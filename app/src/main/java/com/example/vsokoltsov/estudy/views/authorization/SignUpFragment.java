@@ -25,7 +25,8 @@ import rx.schedulers.Schedulers;
 public class SignUpFragment extends Fragment implements Button.OnClickListener {
     private EditText emailField;
     private EditText passwordField;
-    private Button signInButton;
+    private EditText passwordConfirmationField;
+    private Button signUpButton;
     private View fragmentView;
     AuthorizationActivity activity;
     @Override
@@ -39,11 +40,12 @@ public class SignUpFragment extends Fragment implements Button.OnClickListener {
         // Inflate the layout for this fragment
         activity = (AuthorizationActivity) getActivity();
 
-        fragmentView = inflater.inflate(R.layout.authorization_fragment, container, false);
+        fragmentView = inflater.inflate(R.layout.sign_up_fragment, container, false);
         emailField = (EditText) fragmentView.findViewById(R.id.emailField);
         passwordField= (EditText) fragmentView.findViewById(R.id.passwordField);
-        Button signInButton = (Button) fragmentView.findViewById(R.id.signInButton);
-        signInButton.setOnClickListener(this);
+        passwordConfirmationField = (EditText) fragmentView.findViewById(R.id.passwordConfirmationField);
+        signUpButton = (Button) fragmentView.findViewById(R.id.signUpButton);
+        signUpButton.setOnClickListener(this);
         return fragmentView;
     }
 

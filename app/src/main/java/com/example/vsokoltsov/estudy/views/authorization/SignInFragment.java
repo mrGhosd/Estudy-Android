@@ -39,7 +39,7 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
         // Inflate the layout for this fragment
         activity = (AuthorizationActivity) getActivity();
 
-        fragmentView = inflater.inflate(R.layout.authorization_fragment, container, false);
+        fragmentView = inflater.inflate(R.layout.sign_in_fragment, container, false);
         emailField = (EditText) fragmentView.findViewById(R.id.emailField);
         passwordField= (EditText) fragmentView.findViewById(R.id.passwordField);
         Button signInButton = (Button) fragmentView.findViewById(R.id.signInButton);
