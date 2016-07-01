@@ -2,6 +2,7 @@ package com.example.vsokoltsov.estudy.views.authorization;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +13,11 @@ import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.interfaces.UserApi;
 import com.example.vsokoltsov.estudy.models.authorization.SignInRequest;
 import com.example.vsokoltsov.estudy.models.authorization.Token;
+import com.example.vsokoltsov.estudy.services.ErrorResponse;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
+import com.example.vsokoltsov.estudy.util.RetrofitException;
+
+import java.io.IOException;
 
 import retrofit2.Retrofit;
 import rx.Observer;
@@ -60,12 +65,17 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
                 .subscribe(new Observer<Token>() {
                     @Override
                     public void onCompleted() {
-
+                        activity.stopPropgress();
+                        Log.d("tag", "request completed");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        try {
+                            handleErrors(e);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -80,5 +90,14 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
         ApiRequester.getInstance().setToken(token.getToken());
 
         activity.currentUserRequest();
+    }
+
+    private void handleErrors(Throwable t) throws IOException {
+        RetrofitException error = (RetrofitException) t;
+        ErrorResponse errors = error.getErrorBodyAs(ErrorResponse.class);
+        emailField.setError(errors.getFullErrorMessage("email"));
+        passwordField.setError(errors.getFullErrorMessage("password"));
+        
+        activity.stopPropgress();
     }
 }

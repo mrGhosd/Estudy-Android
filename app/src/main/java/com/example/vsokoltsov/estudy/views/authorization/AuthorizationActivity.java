@@ -159,4 +159,8 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
     public void sendAuthRequest() {
         showProgress(R.string.loader_auth);
     }
+
+    public void stopPropgress() {
+        dismissProgress();
+    }
 }
