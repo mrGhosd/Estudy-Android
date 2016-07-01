@@ -231,7 +231,6 @@ public class NavigationDrawer extends Fragment {
     //NAvigation item actions
     private void navigationItemActions(int position) {
         NavigationItem navItem = navigationItems.get(position);
-
         String signIn = resources.getString(R.string.nav_sign_in);
         String signUp = resources.getString(R.string.nav_sign_up);
         String users = resources.getString(R.string.nav_users);
@@ -239,11 +238,13 @@ public class NavigationDrawer extends Fragment {
 
         if (navItem.getTitle().equals(signIn)) {
             Intent authActivity = new Intent(getActivity(), AuthorizationActivity.class);
+            authActivity.putExtra("action", "sign_in");
             startActivity(authActivity);
             getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
             return;
         } else if (navItem.getTitle().equals(signUp)) {
             Intent regActivity = new Intent(getActivity(), AuthorizationActivity.class);
+            regActivity.putExtra("action", "sign_up");
             startActivity(regActivity);
             getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
             return;
