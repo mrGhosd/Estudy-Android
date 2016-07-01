@@ -74,7 +74,7 @@ public class UsersListActivity extends ApplicationBaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-
+                        handleError(e);
                     }
 
                     @Override
