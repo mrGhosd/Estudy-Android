@@ -90,7 +90,7 @@ public class UsersListActivity extends ApplicationBaseActivity {
     }
 
     private void handleError(Throwable error) {
-
+        dismissProgress();
     }
 
     private void setToolbar() {

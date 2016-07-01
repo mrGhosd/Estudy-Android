@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.models.User;
-import com.example.vsokoltsov.estudy.util.ApiRequester;
 import com.example.vsokoltsov.estudy.view_holders.UserViewHolder;
 import com.squareup.picasso.Picasso;
 
@@ -45,7 +44,7 @@ public class UsersListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         userHolder.userName.setText(user.getCorrectName());
 
         if (user.getImage() != null) {
-            String fullURL = ApiRequester.getInstance().fullResourceURL(user.getImage().getUrl());
+            String fullURL = user.getImage().getUrl();
             Picasso.with(this.activity.getApplicationContext())
                     .load(fullURL)
                     .placeholder(emptyUser)
