@@ -6,6 +6,7 @@ package com.example.vsokoltsov.estudy.models.authorization;
 public class SignInRequest {
     private String email;
     private String password;
+    private Authorization authorization = new Authorization();
 
     public SignInRequest(String email, String password) {
         this.email = email;
@@ -26,5 +27,9 @@ public class SignInRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Authorization getAuthorization() {
+        return authorization;
     }
 }

@@ -11,14 +11,15 @@ import android.support.v7.widget.Toolbar;
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.ViewPagerAdapter;
 import com.example.vsokoltsov.estudy.interfaces.UserApi;
-import com.example.vsokoltsov.estudy.models.NavigationItem;
+import com.example.vsokoltsov.estudy.messages.UserMessage;
 import com.example.vsokoltsov.estudy.models.authorization.AuthorizationService;
 import com.example.vsokoltsov.estudy.models.authorization.CurrentUser;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
-import com.example.vsokoltsov.estudy.util.MaterialProgressBar;
 import com.example.vsokoltsov.estudy.util.SlidingTabLayout;
 import com.example.vsokoltsov.estudy.views.base.ApplicationBaseActivity;
 import com.example.vsokoltsov.estudy.views.navigation.NavigationDrawer;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,8 @@ import retrofit2.Retrofit;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+
+import static com.example.vsokoltsov.estudy.R.color.highlighted_text_material_light;
 
 /**
  * Created by vsokoltsov on 13.03.16.
@@ -97,7 +100,7 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
         // Assiging the Sliding Tab Layout View
         tabs = (SlidingTabLayout) findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
-        tabs.setBackground(new ColorDrawable(R.color.highlighted_text_material_light));
+        tabs.setBackground(new ColorDrawable(highlighted_text_material_light));
         tabs.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
             public void onPageSelected(int position) {
@@ -156,7 +159,9 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
     }
 
     public void currentUserReceived(CurrentUser user) {
-        AuthorizationService.getInstance().setCurrentUser(user.getUser());
+        AuthorizationService auth = AuthorizationService.getInstance();
+        auth.setCurrentUser(user.getUser());
+        EventBus.getDefault().post(new UserMessage("currentUser", user.getUser()));
     }
 
     public void sendAuthRequest() {

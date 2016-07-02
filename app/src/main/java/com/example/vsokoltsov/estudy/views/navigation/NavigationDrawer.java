@@ -20,10 +20,15 @@ import android.widget.ListView;
 
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.NavigationListAdapter;
+import com.example.vsokoltsov.estudy.messages.UserMessage;
 import com.example.vsokoltsov.estudy.models.NavigationItem;
+import com.example.vsokoltsov.estudy.models.authorization.AuthorizationService;
 import com.example.vsokoltsov.estudy.views.UsersListActivity;
 import com.example.vsokoltsov.estudy.views.authorization.AuthorizationActivity;
 import com.example.vsokoltsov.estudy.views.chats.ChatActivity;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +48,7 @@ public class NavigationDrawer extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private FrameLayout rootView;
     private Resources resources;
+    private AuthorizationService authManager;
 
     public NavigationDrawer() {
         // Required empty public constructor
@@ -263,22 +269,19 @@ public class NavigationDrawer extends Fragment {
     }
 
 
-    public void setupElementsList(){
-//        Resources res = getResources();
-//        if(navigationItems != null) navigationItems = new ArrayList<NavigationItem>();
-//        if (authManager.getCurrentUser() != null) {
-//            navigationItems.add(new NavigationItem(authManager.getCurrentUser()));
-//        }
-//        else {
-
+    public void setupElementsList() {
+        if(navigationItems != null) navigationItems = new ArrayList<NavigationItem>();
+        authManager = AuthorizationService.getInstance();
+        if (authManager.getCurrentUser() != null) {
+            navigationItems.add(new NavigationItem(authManager.getCurrentUser()));
+        } else {
             navigationItems.add(new NavigationItem(R.drawable.sign_in, resources.getString(R.string.nav_sign_in)));
             navigationItems.add(new NavigationItem(R.drawable.sign_up, resources.getString(R.string.nav_sign_up)));
-//        }
-        navigationItems.add(new NavigationItem(R.drawable.contacts, resources.getString(R.string.nav_users)));
-        navigationItems.add(new NavigationItem(R.drawable.chats, resources.getString(R.string.nav_chats)));
-        setSignOutButton();
-        adapter = new NavigationListAdapter(getActivity(), navigationItems);
-        mDrawerListView.setAdapter(adapter);
+        }
+            navigationItems.add(new NavigationItem(R.drawable.contacts, resources.getString(R.string.nav_users)));
+//        navigationItems.add(new NavigationItem(R.drawable.chats, resources.getString(R.string.nav_chats)));
+            adapter = new NavigationListAdapter(getActivity(), navigationItems);
+            mDrawerListView.setAdapter(adapter);
     }
 
     public void setSignOutButton() {
@@ -305,5 +308,27 @@ public class NavigationDrawer extends Fragment {
 //        editor.putString("stackqapassword", null);
 //        editor.commit();
 //        authManager.signOut();
+    }
+
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    // This method will be called when a MessageEvent is posted
+    @Subscribe
+    public void onEvent(UserMessage event){
+        switch (event.operationName){
+            case "currentUser":
+                setupElementsList();
+                break;
+            default: break;
+        }
     }
 }

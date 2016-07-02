@@ -88,7 +88,6 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
 
     private void  successAuth(Token token) {
         ApiRequester.getInstance().setToken(token.getToken());
-
         activity.currentUserRequest();
     }
 
