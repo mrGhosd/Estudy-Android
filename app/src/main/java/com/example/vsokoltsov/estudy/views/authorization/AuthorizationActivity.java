@@ -15,6 +15,7 @@ import com.example.vsokoltsov.estudy.models.NavigationItem;
 import com.example.vsokoltsov.estudy.models.authorization.AuthorizationService;
 import com.example.vsokoltsov.estudy.models.authorization.CurrentUser;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
+import com.example.vsokoltsov.estudy.util.MaterialProgressBar;
 import com.example.vsokoltsov.estudy.util.SlidingTabLayout;
 import com.example.vsokoltsov.estudy.views.base.ApplicationBaseActivity;
 import com.example.vsokoltsov.estudy.views.navigation.NavigationDrawer;
@@ -54,6 +55,7 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
         setContentView(R.layout.authorization_activity);
         fragmentManager = getSupportFragmentManager();
         setToolbar();
+        setLeftNavigationBar();
         setTitles();
         defineCurrentTab();
         setSlidingTabs();
@@ -118,7 +120,8 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
     }
 
     private void setLeftNavigationBar() {
-        drawerLayout = (DrawerLayout) findViewById(R.id.navigation_drawer);
+        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavigationDrawerFragment = (NavigationDrawer) fragmentManager.findFragmentById(R.id.navigation_drawer);
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
     }

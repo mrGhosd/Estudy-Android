@@ -97,7 +97,7 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
         ErrorResponse errors = error.getErrorBodyAs(ErrorResponse.class);
         emailField.setError(errors.getFullErrorMessage("email"));
         passwordField.setError(errors.getFullErrorMessage("password"));
-        
+
         activity.stopPropgress();
     }
 }
