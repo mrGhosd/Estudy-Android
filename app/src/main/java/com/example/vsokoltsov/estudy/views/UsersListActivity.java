@@ -38,7 +38,6 @@ public class UsersListActivity extends ApplicationBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        api.setContext(getApplicationContext());
         setContentView(R.layout.users_list_activity);
         setToolbar();
         showProgress(R.string.loader_wait);
