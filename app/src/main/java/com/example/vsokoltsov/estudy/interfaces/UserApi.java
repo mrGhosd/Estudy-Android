@@ -3,6 +3,7 @@ package com.example.vsokoltsov.estudy.interfaces;
 import com.example.vsokoltsov.estudy.models.UsersList;
 import com.example.vsokoltsov.estudy.models.authorization.CurrentUser;
 import com.example.vsokoltsov.estudy.models.authorization.SignInRequest;
+import com.example.vsokoltsov.estudy.models.authorization.SignUpRequest;
 import com.example.vsokoltsov.estudy.models.authorization.Token;
 
 import retrofit2.http.Body;
@@ -19,6 +20,9 @@ public interface UserApi {
 
     @POST("sessions")
     Observable<Token> signIn(@Body SignInRequest user);
+
+    @POST("registrations")
+    Observable<Token> signUp(@Body SignUpRequest user);
 
     @GET("sessions/current")
     Observable<CurrentUser> getCurrentUser();

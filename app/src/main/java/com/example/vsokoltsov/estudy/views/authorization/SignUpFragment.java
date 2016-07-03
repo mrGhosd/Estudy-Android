@@ -10,9 +10,13 @@ import android.widget.EditText;
 
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.interfaces.UserApi;
-import com.example.vsokoltsov.estudy.models.authorization.SignInRequest;
+import com.example.vsokoltsov.estudy.models.authorization.SignUpRequest;
 import com.example.vsokoltsov.estudy.models.authorization.Token;
+import com.example.vsokoltsov.estudy.services.ErrorResponse;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
+import com.example.vsokoltsov.estudy.util.RetrofitException;
+
+import java.io.IOException;
 
 import retrofit2.Retrofit;
 import rx.Observer;
@@ -52,22 +56,26 @@ public class SignUpFragment extends Fragment implements Button.OnClickListener {
     @Override
     public void onClick(View view) {
         activity.sendAuthRequest();
-        SignInRequest user = new SignInRequest(emailField.getText().toString(),
-                passwordField.getText().toString());
+        SignUpRequest user = new SignUpRequest(emailField.getText().toString(),
+                passwordField.getText().toString(), passwordConfirmationField.getText().toString());
         Retrofit retrofit = ApiRequester.getInstance().getRestAdapter();
         UserApi service = retrofit.create(UserApi.class);
-        service.signIn(user)
+        service.signUp(user)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Token>() {
                     @Override
                     public void onCompleted() {
-
+                        activity.stopPropgress();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        try {
+                            handleErrors(e);
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                     }
 
                     @Override
@@ -80,7 +88,16 @@ public class SignUpFragment extends Fragment implements Button.OnClickListener {
 
     private void  successAuth(Token token) {
         ApiRequester.getInstance().setToken(token.getToken());
-
         activity.currentUserRequest();
+    }
+
+    private void handleErrors(Throwable t) throws IOException {
+        RetrofitException error = (RetrofitException) t;
+        ErrorResponse errors = error.getErrorBodyAs(ErrorResponse.class);
+        emailField.setError(errors.getFullErrorMessage("email"));
+        passwordField.setError(errors.getFullErrorMessage("password"));
+        passwordConfirmationField.setError(errors.getFullErrorMessage("password_confirmation"));
+
+        activity.stopPropgress();
     }
 }

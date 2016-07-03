@@ -1,7 +1,9 @@
 package com.example.vsokoltsov.estudy.views.navigation;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -67,7 +69,6 @@ public class NavigationDrawer extends Fragment {
             mCurrentSelectedPosition = savedInstanceState.getInt("selected_navigation_drawer_position");
             mFromSavedInstanceState = true;
         }
-
         // Select either the default item (0) or the last selected item.
 //        selectItem(mCurrentSelectedPosition);
     }
@@ -278,36 +279,35 @@ public class NavigationDrawer extends Fragment {
             navigationItems.add(new NavigationItem(R.drawable.sign_in, resources.getString(R.string.nav_sign_in)));
             navigationItems.add(new NavigationItem(R.drawable.sign_up, resources.getString(R.string.nav_sign_up)));
         }
-            navigationItems.add(new NavigationItem(R.drawable.contacts, resources.getString(R.string.nav_users)));
-//        navigationItems.add(new NavigationItem(R.drawable.chats, resources.getString(R.string.nav_chats)));
-            adapter = new NavigationListAdapter(getActivity(), navigationItems);
-            mDrawerListView.setAdapter(adapter);
+        navigationItems.add(new NavigationItem(R.drawable.contacts, resources.getString(R.string.nav_users)));
+        setSignOutButton();
+        adapter = new NavigationListAdapter(getActivity(), navigationItems);
+        mDrawerListView.setAdapter(adapter);
     }
 
     public void setSignOutButton() {
         Button signOutButton = (Button) rootView.findViewById(R.id.sign_out_button);
-//        if (authManager.getCurrentUser() != null) {
-//            signOutButton.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    signOut();
-//                }
-//            });
-//            signOutButton.setVisibility(View.VISIBLE);
-//        }
-//        else {
+        if (authManager.getCurrentUser() != null) {
+            signOutButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    signOut();
+                }
+            });
+            signOutButton.setVisibility(View.VISIBLE);
+        }
+        else {
             signOutButton.setVisibility(View.INVISIBLE);
-//        }
+        }
     }
 
     public void signOut() {
-//        authManager.setCurrentUser(null);
-//        SharedPreferences.Editor editor = (SharedPreferences.Editor)
-//                getActivity().getSharedPreferences("stackqa", Context.MODE_PRIVATE).edit();
-//        editor.putString("stackqaemail", null);
-//        editor.putString("stackqapassword", null);
-//        editor.commit();
-//        authManager.signOut();
+        authManager.setCurrentUser(null);
+        SharedPreferences.Editor editor = (SharedPreferences.Editor)
+                getActivity().getSharedPreferences("estudy", Context.MODE_PRIVATE).edit();
+        editor.putString("estudytoken", null);
+        editor.commit();
+        EventBus.getDefault().post(new UserMessage("signOut", authManager.getCurrentUser()));
     }
 
     public void onStart() {
@@ -326,6 +326,9 @@ public class NavigationDrawer extends Fragment {
     public void onEvent(UserMessage event){
         switch (event.operationName){
             case "currentUser":
+                setupElementsList();
+                break;
+            case "signOut":
                 setupElementsList();
                 break;
             default: break;
