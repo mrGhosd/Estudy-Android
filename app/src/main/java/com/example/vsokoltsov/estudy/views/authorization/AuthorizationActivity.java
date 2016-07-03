@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.ContextThemeWrapper;
 
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.ViewPagerAdapter;
@@ -41,6 +42,7 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
     private Toolbar mActionBarToolbar;
     private android.support.v4.app.FragmentManager fragmentManager;
     private String action;
+    public AuthorizationBaseFragment authorizationBaseFragment;
 
     private FragmentTabHost mTabHost;
 
@@ -63,9 +65,9 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
         Bundle arguments = new Bundle();
         arguments.putString("action", action);
         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AuthorizationBaseFragment fragment = new AuthorizationBaseFragment();
-        fragment.setArguments(arguments);
-        fragmentTransaction.add(R.id.main_content, fragment);
+        authorizationBaseFragment = new AuthorizationBaseFragment();
+        authorizationBaseFragment.setArguments(arguments);
+        fragmentTransaction.add(R.id.main_content, authorizationBaseFragment);
         fragmentTransaction.commit();
     }
 
@@ -176,4 +178,6 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
     public void stopPropgress() {
         dismissProgress();
     }
+
+
 }
