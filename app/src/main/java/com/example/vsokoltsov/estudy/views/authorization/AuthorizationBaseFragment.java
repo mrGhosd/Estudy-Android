@@ -1,12 +1,17 @@
 package com.example.vsokoltsov.estudy.views.authorization;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.ViewPagerAdapter;
@@ -16,7 +21,6 @@ import com.example.vsokoltsov.estudy.models.authorization.AuthorizationService;
 import com.example.vsokoltsov.estudy.models.authorization.CurrentUser;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
 import com.example.vsokoltsov.estudy.util.SlidingTabLayout;
-import com.example.vsokoltsov.estudy.views.base.ApplicationBaseActivity;
 import com.example.vsokoltsov.estudy.views.navigation.NavigationDrawer;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,13 +36,13 @@ import rx.schedulers.Schedulers;
 import static com.example.vsokoltsov.estudy.R.color.highlighted_text_material_light;
 
 /**
- * Created by vsokoltsov on 13.03.16.
+ * Created by vsokoltsov on 03.07.16.
  */
-public class AuthorizationActivity extends ApplicationBaseActivity {
-    //Common fields
-    private NavigationDrawer mNavigationDrawerFragment;
-    private DrawerLayout drawerLayout;
-    private Toolbar mActionBarToolbar;
+public class AuthorizationBaseFragment extends Fragment {
+    private AuthorizationActivity activity;
+    private View fragmentView;
+
+
     private android.support.v4.app.FragmentManager fragmentManager;
     private String action;
 
@@ -53,20 +57,17 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
     private int Numboftabs =2;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.authorization_activity);
-        fragmentManager = getSupportFragmentManager();
-        setToolbar();
-        setLeftNavigationBar();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        activity = (AuthorizationActivity) getActivity();
+
+        fragmentView = inflater.inflate(R.layout.authorization_base_fragment, container, false);
+        fragmentManager = getFragmentManager();
+        setTitles();
         defineCurrentTab();
-        Bundle arguments = new Bundle();
-        arguments.putString("action", action);
-        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AuthorizationBaseFragment fragment = new AuthorizationBaseFragment();
-        fragment.setArguments(arguments);
-        fragmentTransaction.add(R.id.main_content, fragment);
-        fragmentTransaction.commit();
+        setSlidingTabs();
+        return fragmentView;
     }
 
     private void setTitles() {
@@ -78,32 +79,30 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
     }
 
     private void defineCurrentTab() {
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            action = (String) extras.getString("action");
-        }
+        Bundle extras = getArguments();
+        action = extras.getString("action");
     }
 
     private void setSlidingTabs() {
         // Creating The ViewPagerAdapter and Passing Fragment Manager, Titles fot the Tabs and Number Of Tabs.
-        adapter =  new ViewPagerAdapter(getSupportFragmentManager(),titles,Numboftabs);
+        adapter =  new ViewPagerAdapter(getFragmentManager(), titles, Numboftabs);
 
         // Assigning ViewPager View and setting the adapter
-        pager = (ViewPager) findViewById(R.id.pager);
+        pager = (ViewPager) fragmentView.findViewById(R.id.pager);
         pager.setAdapter(adapter);
         Resources res = getResources();
 
         if (action.equals("sign_in")) {
             pager.setCurrentItem(0);
-            setTitle(titles.get(0));
+            activity.setTitle(titles.get(0));
         }
         else if (action.equals("sign_up")) {
             pager.setCurrentItem(1);
-            setTitle(titles.get(1));
+            activity.setTitle(titles.get(1));
         }
 
         // Assiging the Sliding Tab Layout View
-        tabs = (SlidingTabLayout) findViewById(R.id.tabs);
+        tabs = (SlidingTabLayout) fragmentView.findViewById(R.id.tabs);
         tabs.setDistributeEvenly(true); // To make the Tabs Fixed set this true, This makes the tabs Space Evenly in Available width
         tabs.setBackground(new ColorDrawable(highlighted_text_material_light));
         tabs.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
@@ -111,7 +110,7 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 String title = titles.get(position);
-                getSupportActionBar().setTitle(title);
+                activity.getSupportActionBar().setTitle(title);
             }
         });
 
@@ -127,18 +126,6 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
         tabs.setViewPager(pager);
     }
 
-    private void setLeftNavigationBar() {
-        android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mNavigationDrawerFragment = (NavigationDrawer) fragmentManager.findFragmentById(R.id.navigation_drawer);
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
-    }
-
-    private void setToolbar() {
-        mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
-        setSupportActionBar(mActionBarToolbar);
-    }
-
     public void currentUserRequest() {
         Retrofit retrofit = ApiRequester.getInstance().getRestAdapter();
         UserApi service = retrofit.create(UserApi.class);
@@ -148,7 +135,7 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
                 .subscribe(new Observer<CurrentUser>() {
                     @Override
                     public void onCompleted() {
-                        dismissProgress();
+                        activity.stopPropgress();
                     }
 
                     @Override
@@ -167,13 +154,5 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
         AuthorizationService auth = AuthorizationService.getInstance();
         auth.setCurrentUser(user.getUser());
         EventBus.getDefault().post(new UserMessage("currentUser", user.getUser()));
-    }
-
-    public void sendAuthRequest() {
-        showProgress(R.string.loader_auth);
-    }
-
-    public void stopPropgress() {
-        dismissProgress();
     }
 }
