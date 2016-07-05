@@ -25,7 +25,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class UsersListActivity extends ApplicationBaseActivity {
+public class MainActivity extends ApplicationBaseActivity {
     private String AppHost = "http://404b76c2.ngrok.io/api/v0";
     private List<User> users = new ArrayList<User>();
     private RecyclerView rv;

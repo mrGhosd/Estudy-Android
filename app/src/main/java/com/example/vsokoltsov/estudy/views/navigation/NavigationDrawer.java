@@ -25,7 +25,7 @@ import com.example.vsokoltsov.estudy.adapters.NavigationListAdapter;
 import com.example.vsokoltsov.estudy.messages.UserMessage;
 import com.example.vsokoltsov.estudy.models.NavigationItem;
 import com.example.vsokoltsov.estudy.models.authorization.AuthorizationService;
-import com.example.vsokoltsov.estudy.views.UsersListActivity;
+import com.example.vsokoltsov.estudy.views.MainActivity;
 import com.example.vsokoltsov.estudy.views.authorization.AuthorizationActivity;
 import com.example.vsokoltsov.estudy.views.chats.ChatActivity;
 
@@ -256,7 +256,7 @@ public class NavigationDrawer extends Fragment {
             getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
             return;
         } else if (navItem.getTitle().equals(users)) {
-            Intent usersActivity = new Intent(getActivity(), UsersListActivity.class);
+            Intent usersActivity = new Intent(getActivity(), MainActivity.class);
             startActivity(usersActivity);
             getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
             return;

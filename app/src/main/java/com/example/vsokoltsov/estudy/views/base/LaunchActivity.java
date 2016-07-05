@@ -10,7 +10,7 @@ import com.example.vsokoltsov.estudy.interfaces.UserApi;
 import com.example.vsokoltsov.estudy.models.authorization.AuthorizationService;
 import com.example.vsokoltsov.estudy.models.authorization.CurrentUser;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
-import com.example.vsokoltsov.estudy.views.UsersListActivity;
+import com.example.vsokoltsov.estudy.views.MainActivity;
 
 import retrofit2.Retrofit;
 import rx.Observer;
@@ -62,7 +62,7 @@ public class LaunchActivity extends ActionBarActivity{
     }
 
     private void transitionToUsersList() {
-        Intent usersActivity = new Intent(this, UsersListActivity.class);
+        Intent usersActivity = new Intent(this, MainActivity.class);
         startActivity(usersActivity);
         overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
     }
