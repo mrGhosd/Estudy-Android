@@ -21,6 +21,7 @@ import com.example.vsokoltsov.estudy.models.authorization.AuthorizationService;
 import com.example.vsokoltsov.estudy.models.authorization.CurrentUser;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
 import com.example.vsokoltsov.estudy.util.SlidingTabLayout;
+import com.example.vsokoltsov.estudy.views.base.ApplicationBaseActivity;
 import com.example.vsokoltsov.estudy.views.navigation.NavigationDrawer;
 
 import org.greenrobot.eventbus.EventBus;
@@ -39,7 +40,7 @@ import static com.example.vsokoltsov.estudy.R.color.highlighted_text_material_li
  * Created by vsokoltsov on 03.07.16.
  */
 public class AuthorizationBaseFragment extends Fragment {
-    private AuthorizationActivity activity;
+    private ApplicationBaseActivity activity;
     private View fragmentView;
 
 
@@ -60,7 +61,7 @@ public class AuthorizationBaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        activity = (AuthorizationActivity) getActivity();
+        activity = (ApplicationBaseActivity) getActivity();
 
         fragmentView = inflater.inflate(R.layout.authorization_base_fragment, container, false);
         fragmentManager = getFragmentManager();
@@ -135,7 +136,7 @@ public class AuthorizationBaseFragment extends Fragment {
                 .subscribe(new Observer<CurrentUser>() {
                     @Override
                     public void onCompleted() {
-                        activity.stopPropgress();
+                        activity.dismissProgress();
                     }
 
                     @Override

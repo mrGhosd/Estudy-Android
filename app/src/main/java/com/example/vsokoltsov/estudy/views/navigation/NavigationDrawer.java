@@ -27,7 +27,9 @@ import com.example.vsokoltsov.estudy.models.NavigationItem;
 import com.example.vsokoltsov.estudy.models.authorization.AuthorizationService;
 import com.example.vsokoltsov.estudy.views.MainActivity;
 import com.example.vsokoltsov.estudy.views.authorization.AuthorizationActivity;
+import com.example.vsokoltsov.estudy.views.authorization.AuthorizationBaseFragment;
 import com.example.vsokoltsov.estudy.views.chats.ChatActivity;
+import com.example.vsokoltsov.estudy.views.users.UsersListFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -237,6 +239,16 @@ public class NavigationDrawer extends Fragment {
 
     //NAvigation item actions
     private void navigationItemActions(int position) {
+        Boolean isTablet = getResources().getBoolean(R.bool.isTablet);
+        if (isTablet) {
+            setItemsActionsForTablet(position);
+        }
+        else {
+            setItemsActionsForPhone(position);
+        }
+    }
+
+    private void setItemsActionsForPhone(int position) {
         NavigationItem navItem = navigationItems.get(position);
         String signIn = resources.getString(R.string.nav_sign_in);
         String signUp = resources.getString(R.string.nav_sign_up);
@@ -267,6 +279,39 @@ public class NavigationDrawer extends Fragment {
             return;
         }
         mDrawerLayout.closeDrawer(rootView);
+    }
+
+    private void setItemsActionsForTablet(int position) {
+        Bundle arguments = new Bundle();
+        android.support.v4.app.FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        NavigationItem navItem = navigationItems.get(position);
+        String signIn = resources.getString(R.string.nav_sign_in);
+        String signUp = resources.getString(R.string.nav_sign_up);
+        String users = resources.getString(R.string.nav_users);
+        String messages = resources.getString(R.string.nav_chats);
+
+        if (navItem.getTitle().equals(signIn)) {
+            arguments.putString("action", "sign_in");
+            AuthorizationBaseFragment signInView= new AuthorizationBaseFragment();
+            signInView.setArguments(arguments);
+            fragmentTransaction.replace(R.id.container, signInView);
+        } else if (navItem.getTitle().equals(signUp)) {
+            arguments.putString("action", "sign_up");
+            AuthorizationBaseFragment signUpView= new AuthorizationBaseFragment();
+            signUpView.setArguments(arguments);
+            fragmentTransaction.replace(R.id.container, signUpView);
+        } else if (navItem.getTitle().equals(users)) {
+            UsersListFragment usersListFragment = new UsersListFragment();
+            fragmentTransaction.replace(R.id.container, usersListFragment);
+        } else if (navItem.getTitle().equals(messages)) {
+            Intent chatsActivity = new Intent(getActivity(), ChatActivity.class);
+            startActivity(chatsActivity);
+            getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }
+        fragmentTransaction.commit();
+
     }
 
 

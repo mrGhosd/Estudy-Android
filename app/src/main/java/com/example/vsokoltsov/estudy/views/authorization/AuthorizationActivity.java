@@ -141,36 +141,6 @@ public class AuthorizationActivity extends ApplicationBaseActivity {
         setSupportActionBar(mActionBarToolbar);
     }
 
-    public void currentUserRequest() {
-        Retrofit retrofit = ApiRequester.getInstance().getRestAdapter();
-        UserApi service = retrofit.create(UserApi.class);
-        service.getCurrentUser()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<CurrentUser>() {
-                    @Override
-                    public void onCompleted() {
-                        dismissProgress();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(CurrentUser user) {
-                        currentUserReceived(user);
-                    }
-                });
-    }
-
-    public void currentUserReceived(CurrentUser user) {
-        AuthorizationService auth = AuthorizationService.getInstance();
-        auth.setCurrentUser(user.getUser());
-        EventBus.getDefault().post(new UserMessage("currentUser", user.getUser()));
-    }
-
     public void sendAuthRequest() {
         showProgress(R.string.loader_auth);
     }

@@ -16,6 +16,7 @@ import com.example.vsokoltsov.estudy.models.authorization.Token;
 import com.example.vsokoltsov.estudy.services.ErrorResponse;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
 import com.example.vsokoltsov.estudy.util.RetrofitException;
+import com.example.vsokoltsov.estudy.views.base.ApplicationBaseActivity;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
     private EditText passwordField;
     private Button signInButton;
     private View fragmentView;
-    AuthorizationActivity activity;
+    ApplicationBaseActivity activity;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +43,7 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        activity = (AuthorizationActivity) getActivity();
+        activity = (ApplicationBaseActivity) getActivity();
 
         fragmentView = inflater.inflate(R.layout.sign_in_fragment, container, false);
         emailField = (EditText) fragmentView.findViewById(R.id.emailField);
@@ -54,7 +55,7 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        activity.sendAuthRequest();
+        activity.showProgress(R.string.sign_in_action);
         SignInRequest user = new SignInRequest(emailField.getText().toString(),
                 passwordField.getText().toString());
         Retrofit retrofit = ApiRequester.getInstance().getRestAdapter();
@@ -65,7 +66,7 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
                 .subscribe(new Observer<Token>() {
                     @Override
                     public void onCompleted() {
-                        activity.stopPropgress();
+                        activity.dismissProgress();
                         Log.d("tag", "request completed");
                     }
 
@@ -97,6 +98,6 @@ public class SignInFragment extends Fragment implements Button.OnClickListener {
         emailField.setError(errors.getFullErrorMessage("email"));
         passwordField.setError(errors.getFullErrorMessage("password"));
 
-        activity.stopPropgress();
+        activity.dismissProgress();
     }
 }

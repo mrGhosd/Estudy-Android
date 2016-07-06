@@ -15,6 +15,7 @@ import com.example.vsokoltsov.estudy.models.authorization.Token;
 import com.example.vsokoltsov.estudy.services.ErrorResponse;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
 import com.example.vsokoltsov.estudy.util.RetrofitException;
+import com.example.vsokoltsov.estudy.views.base.ApplicationBaseActivity;
 
 import java.io.IOException;
 
@@ -32,7 +33,7 @@ public class SignUpFragment extends Fragment implements Button.OnClickListener {
     private EditText passwordConfirmationField;
     private Button signUpButton;
     private View fragmentView;
-    AuthorizationActivity activity;
+    ApplicationBaseActivity activity;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +43,7 @@ public class SignUpFragment extends Fragment implements Button.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        activity = (AuthorizationActivity) getActivity();
+        activity = (ApplicationBaseActivity) getActivity();
 
         fragmentView = inflater.inflate(R.layout.sign_up_fragment, container, false);
         emailField = (EditText) fragmentView.findViewById(R.id.emailField);
@@ -55,7 +56,7 @@ public class SignUpFragment extends Fragment implements Button.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        activity.sendAuthRequest();
+        activity.showProgress(R.string.sign_up_action);
         SignUpRequest user = new SignUpRequest(emailField.getText().toString(),
                 passwordField.getText().toString(), passwordConfirmationField.getText().toString());
         Retrofit retrofit = ApiRequester.getInstance().getRestAdapter();
@@ -66,7 +67,7 @@ public class SignUpFragment extends Fragment implements Button.OnClickListener {
                 .subscribe(new Observer<Token>() {
                     @Override
                     public void onCompleted() {
-                        activity.stopPropgress();
+                        activity.dismissProgress();
                     }
 
                     @Override
@@ -98,6 +99,6 @@ public class SignUpFragment extends Fragment implements Button.OnClickListener {
         passwordField.setError(errors.getFullErrorMessage("password"));
         passwordConfirmationField.setError(errors.getFullErrorMessage("password_confirmation"));
 
-        activity.stopPropgress();
+        activity.dismissProgress();
     }
 }
