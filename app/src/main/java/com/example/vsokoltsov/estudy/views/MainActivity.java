@@ -1,6 +1,7 @@
 package com.example.vsokoltsov.estudy.views;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 
@@ -55,7 +56,15 @@ public class MainActivity extends ApplicationBaseActivity {
     }
 
     private void basicUIForTablet() {
-
+        mNavigationDrawerFragment = (NavigationDrawer) fragmentManager.findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment.setDrawerLayout(null);
+        Fragment frg = fragmentManager.findFragmentById(R.id.container);
+        if (frg == null) {
+            android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            usersListFragment = new UsersListFragment();
+            fragmentTransaction.add(R.id.container, usersListFragment);
+            fragmentTransaction.commit();
+        }
     }
 
     private void setToolbar() {
