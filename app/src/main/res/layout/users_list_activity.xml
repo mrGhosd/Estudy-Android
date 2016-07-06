@@ -13,13 +13,10 @@
 
         <include layout="@layout/toolbar" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/usersList"
+        <FrameLayout
+            android:id="@+id/main_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:background="@drawable/estudy_bg_2" />
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <fragment
