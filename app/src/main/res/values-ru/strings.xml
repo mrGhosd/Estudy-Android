@@ -5,6 +5,8 @@
     <string name="nav_sign_out">Выйти</string>
     <string name="nav_chats">Сообщения</string>
     <string name="nav_users">Контакты</string>
+    <string name="nav_course">Курсы</string>
+
     <string name="loader_wait">Пожалуйста, подождите...</string>
     <string name="loader_auth">Авторизация...</string>
     <string name="email">Электронная почта</string>

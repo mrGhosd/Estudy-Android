@@ -325,6 +325,7 @@ public class NavigationDrawer extends Fragment {
             navigationItems.add(new NavigationItem(R.drawable.sign_up, resources.getString(R.string.nav_sign_up)));
         }
         navigationItems.add(new NavigationItem(R.drawable.contacts, resources.getString(R.string.nav_users)));
+        navigationItems.add(new NavigationItem(R.drawable.course, resources.getString(R.string.nav_course)));
         setSignOutButton();
         adapter = new NavigationListAdapter(getActivity(), navigationItems);
         mDrawerListView.setAdapter(adapter);
