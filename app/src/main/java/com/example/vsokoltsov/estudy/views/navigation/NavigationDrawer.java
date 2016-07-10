@@ -29,6 +29,8 @@ import com.example.vsokoltsov.estudy.views.MainActivity;
 import com.example.vsokoltsov.estudy.views.authorization.AuthorizationActivity;
 import com.example.vsokoltsov.estudy.views.authorization.AuthorizationBaseFragment;
 import com.example.vsokoltsov.estudy.views.chats.ChatActivity;
+import com.example.vsokoltsov.estudy.views.course.CoursesListActivity;
+import com.example.vsokoltsov.estudy.views.course.CoursesListFragment;
 import com.example.vsokoltsov.estudy.views.users.UsersListFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -254,6 +256,7 @@ public class NavigationDrawer extends Fragment {
         String signUp = resources.getString(R.string.nav_sign_up);
         String users = resources.getString(R.string.nav_users);
         String messages = resources.getString(R.string.nav_chats);
+        String courses = resources.getString(R.string.nav_course);
 
         if (navItem.getTitle().equals(signIn)) {
             Intent authActivity = new Intent(getActivity(), AuthorizationActivity.class);
@@ -278,6 +281,12 @@ public class NavigationDrawer extends Fragment {
             getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
             return;
         }
+        else if (navItem.getTitle().equals(courses)) {
+            Intent coursesActivity = new Intent(getActivity(), CoursesListActivity.class);
+            startActivity(coursesActivity);
+            getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+            return;
+        }
         mDrawerLayout.closeDrawer(rootView);
     }
 
@@ -291,6 +300,7 @@ public class NavigationDrawer extends Fragment {
         String signUp = resources.getString(R.string.nav_sign_up);
         String users = resources.getString(R.string.nav_users);
         String messages = resources.getString(R.string.nav_chats);
+        String courses = resources.getString(R.string.nav_course);
 
         if (navItem.getTitle().equals(signIn)) {
             arguments.putString("action", "sign_in");
@@ -305,10 +315,10 @@ public class NavigationDrawer extends Fragment {
         } else if (navItem.getTitle().equals(users)) {
             UsersListFragment usersListFragment = new UsersListFragment();
             fragmentTransaction.replace(R.id.container, usersListFragment);
-        } else if (navItem.getTitle().equals(messages)) {
-            Intent chatsActivity = new Intent(getActivity(), ChatActivity.class);
-            startActivity(chatsActivity);
-            getActivity().overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        }  else if (navItem.getTitle().equals(courses)) {
+            CoursesListFragment coursesListFragment = new CoursesListFragment();
+            fragmentTransaction.replace(R.id.container, coursesListFragment);
+            return;
         }
         fragmentTransaction.commit();
 

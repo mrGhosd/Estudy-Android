@@ -1,64 +1,35 @@
-package com.example.vsokoltsov.estudy.views.authorization;
+package com.example.vsokoltsov.estudy.views.course;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTabHost;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 
 import com.example.vsokoltsov.estudy.R;
-import com.example.vsokoltsov.estudy.adapters.ViewPagerAdapter;
-import com.example.vsokoltsov.estudy.util.SlidingTabLayout;
 import com.example.vsokoltsov.estudy.views.base.ApplicationBaseActivity;
 import com.example.vsokoltsov.estudy.views.navigation.NavigationDrawer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Created by vsokoltsov on 13.03.16.
+ * Created by vsokoltsov on 10.07.16.
  */
-public class AuthorizationActivity extends ApplicationBaseActivity {
+public class CoursesListActivity extends ApplicationBaseActivity {
     //Common fields
     private NavigationDrawer mNavigationDrawerFragment;
     private DrawerLayout drawerLayout;
     private Toolbar mActionBarToolbar;
     private android.support.v4.app.FragmentManager fragmentManager;
-    private String action;
-    public AuthorizationBaseFragment authorizationBaseFragment;
-
-    private FragmentTabHost mTabHost;
-
-    //Sliding tab elements
-    private ViewPager pager;
-    private ViewPagerAdapter adapter;
-    private SlidingTabLayout tabs;
-    private CharSequence Titles[];
-    private List<String> titles = new ArrayList<String>();
-    private int Numboftabs =2;
+    private CoursesListFragment coursesListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.authorization_activity);
+        setContentView(R.layout.course_list_activity);
         fragmentManager = getSupportFragmentManager();
         setToolbar();
         setLeftNavigationBar();
-        defineCurrentTab();
-        Bundle arguments = new Bundle();
-        arguments.putString("action", action);
         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        authorizationBaseFragment = new AuthorizationBaseFragment();
-        authorizationBaseFragment.setArguments(arguments);
-        fragmentTransaction.add(R.id.main_content, authorizationBaseFragment);
+        coursesListFragment = new CoursesListFragment();
+        fragmentTransaction.add(R.id.main_content, coursesListFragment);
         fragmentTransaction.commit();
-    }
-
-    private void defineCurrentTab() {
-        Bundle extras = getIntent().getExtras();
-        if(extras != null) {
-            action = (String) extras.getString("action");
-        }
     }
 
     private void setLeftNavigationBar() {
