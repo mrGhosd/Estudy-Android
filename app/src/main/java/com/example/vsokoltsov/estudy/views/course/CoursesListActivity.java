@@ -25,6 +25,7 @@ public class CoursesListActivity extends ApplicationBaseActivity {
         setContentView(R.layout.course_list_activity);
         fragmentManager = getSupportFragmentManager();
         setToolbar();
+        showProgress(R.string.loader_wait);
         setLeftNavigationBar();
         android.support.v4.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         coursesListFragment = new CoursesListFragment();
