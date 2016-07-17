@@ -4,8 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.CoursesListAdapter;
@@ -35,14 +39,16 @@ public class CoursesListFragment extends Fragment {
     private RecyclerView rv;
     private CoursesListAdapter adapter;
     private ApiRequester api = ApiRequester.getInstance();
+    private Menu mainMenu;
+    private SearchView mSearchView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         activity = (ApplicationBaseActivity) getActivity();
-
         fragmentView = inflater.inflate(R.layout.course_list_fragment, container, false);
+        setHasOptionsMenu(true);
         adapter = new CoursesListAdapter(courses, getActivity());
         rv = (RecyclerView) fragmentView.findViewById(R.id.coursesList);
         rv.setAdapter(adapter);
@@ -75,6 +81,16 @@ public class CoursesListFragment extends Fragment {
                         setCoursesList(coursesList);
                     }
                 });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        mainMenu = menu;
+        inflater.inflate(R.menu.courses_list_menu, mainMenu);
+        super.onCreateOptionsMenu(menu, inflater);
+        MenuItem searchItem = (MenuItem) mainMenu.findItem(R.id.action_search);
+        searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM
+                | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
     }
 
     private void setCoursesList(CoursesList courses) {
