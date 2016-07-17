@@ -2,14 +2,15 @@ package com.example.vsokoltsov.estudy.views.course;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
 
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.CoursesListAdapter;
@@ -29,10 +30,11 @@ import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+
 /**
  * Created by vsokoltsov on 10.07.16.
  */
-public class CoursesListFragment extends Fragment {
+public class CoursesListFragment extends Fragment implements SearchView.OnQueryTextListener {
     private ApplicationBaseActivity activity;
     private View fragmentView;
     private List<Course> courses = new ArrayList<Course>();
@@ -40,7 +42,7 @@ public class CoursesListFragment extends Fragment {
     private CoursesListAdapter adapter;
     private ApiRequester api = ApiRequester.getInstance();
     private Menu mainMenu;
-    private SearchView mSearchView;
+    private SearchView searchView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -91,6 +93,8 @@ public class CoursesListFragment extends Fragment {
         MenuItem searchItem = (MenuItem) mainMenu.findItem(R.id.action_search);
         searchItem.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_IF_ROOM
                 | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(this);
     }
 
     private void setCoursesList(CoursesList courses) {
@@ -100,5 +104,15 @@ public class CoursesListFragment extends Fragment {
 
     private void handleError(Throwable error) {
         activity.dismissProgress();
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        return false;
     }
 }

@@ -70,7 +70,7 @@ public class MainActivity extends ApplicationBaseActivity {
     private void setToolbar() {
         Toolbar mActionBarToolbar = (Toolbar) findViewById(R.id.toolbar_actionbar);
         setSupportActionBar(mActionBarToolbar);
-        progressBar = (MaterialProgressBar) findViewById(R.id.header_progress_bar);
+//        progressBar = (MaterialProgressBar) findViewById(R.id.header_progress_bar);
     }
 
     public void stopProgress() {
