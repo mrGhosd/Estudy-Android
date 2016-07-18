@@ -3,6 +3,7 @@ package com.example.vsokoltsov.estudy.interfaces;
 import com.example.vsokoltsov.estudy.models.CoursesList;
 
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -11,4 +12,9 @@ import rx.Observable;
 public interface CourseApi {
     @GET("courses")
     Observable<CoursesList> loadCourses();
+
+    @GET("search")
+    Observable<CoursesList> searchCourses(
+            @Query("object") String object,
+            @Query("query") String query);
 }

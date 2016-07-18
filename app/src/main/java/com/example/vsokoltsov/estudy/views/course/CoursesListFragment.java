@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -113,6 +114,11 @@ public class CoursesListFragment extends Fragment implements SearchView.OnQueryT
 
     @Override
     public boolean onQueryTextChange(String s) {
-        return false;
+        if ( TextUtils.isEmpty ( s ) ) {
+            adapter.getFilter().filter("");
+        } else {
+            adapter.getFilter().filter(s.toString());
+        }
+        return true;
     }
 }
