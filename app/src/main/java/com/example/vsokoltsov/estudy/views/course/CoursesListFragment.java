@@ -3,6 +3,7 @@ package com.example.vsokoltsov.estudy.views.course;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
@@ -32,10 +33,11 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
+
 /**
  * Created by vsokoltsov on 10.07.16.
  */
-public class CoursesListFragment extends Fragment implements SearchView.OnQueryTextListener {
+public class CoursesListFragment extends Fragment implements SearchView.OnQueryTextListener, SwipeRefreshLayout.OnRefreshListener {
     private ApplicationBaseActivity activity;
     private View fragmentView;
     private List<Course> courses = new ArrayList<Course>();
@@ -44,6 +46,7 @@ public class CoursesListFragment extends Fragment implements SearchView.OnQueryT
     private ApiRequester api = ApiRequester.getInstance();
     private Menu mainMenu;
     private SearchView searchView;
+    private SwipeRefreshLayout swipeLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,10 +57,12 @@ public class CoursesListFragment extends Fragment implements SearchView.OnQueryT
         setHasOptionsMenu(true);
         adapter = new CoursesListAdapter(courses, getActivity());
         rv = (RecyclerView) fragmentView.findViewById(R.id.coursesList);
+        swipeLayout = (SwipeRefreshLayout) fragmentView.findViewById(R.id.swipe_layout);
         rv.setAdapter(adapter);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
+        swipeLayout.setOnRefreshListener(this);
         loadCoursesList();
         return fragmentView;
     }
@@ -71,6 +76,7 @@ public class CoursesListFragment extends Fragment implements SearchView.OnQueryT
                 .subscribe(new Observer<CoursesList>() {
                     @Override
                     public void onCompleted() {
+                        swipeLayout.setRefreshing(false);
                         activity.dismissProgress();
                     }
 
@@ -120,5 +126,10 @@ public class CoursesListFragment extends Fragment implements SearchView.OnQueryT
             adapter.getFilter().filter(s.toString());
         }
         return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        loadCoursesList();
     }
 }
