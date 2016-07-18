@@ -1,5 +1,6 @@
 package com.example.vsokoltsov.estudy.views.course;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
@@ -49,6 +50,7 @@ public class CoursesListFragment extends Fragment implements SearchView.OnQueryT
     private SearchView searchView;
     private SwipeRefreshLayout swipeLayout;
     private int pageNumber = 1;
+    private Resources resources;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,7 +70,7 @@ public class CoursesListFragment extends Fragment implements SearchView.OnQueryT
         rv.setLayoutManager(llm);
 
         swipeLayout.setOnRefreshListener(this);
-        
+
         loadCoursesList();
         return fragmentView;
     }

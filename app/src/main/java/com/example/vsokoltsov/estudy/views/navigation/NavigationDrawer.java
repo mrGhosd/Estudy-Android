@@ -161,7 +161,7 @@ public class NavigationDrawer extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mDrawerToggle != null && mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -318,7 +318,6 @@ public class NavigationDrawer extends Fragment {
         }  else if (navItem.getTitle().equals(courses)) {
             CoursesListFragment coursesListFragment = new CoursesListFragment();
             fragmentTransaction.replace(R.id.container, coursesListFragment);
-            return;
         }
         fragmentTransaction.commit();
 

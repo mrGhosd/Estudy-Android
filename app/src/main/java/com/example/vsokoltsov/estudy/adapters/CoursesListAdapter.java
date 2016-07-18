@@ -80,7 +80,7 @@ public class CoursesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void addCourse(Course course) {
-        if (!courses.contains(course)) {
+        if (course != null && !courses.contains(course)) {
             courses.add(course);
             notifyItemInserted(courses.size() - 1);
         }
