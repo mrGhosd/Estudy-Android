@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import com.example.vsokoltsov.estudy.R;
 import com.example.vsokoltsov.estudy.adapters.CoursesListAdapter;
 import com.example.vsokoltsov.estudy.interfaces.CourseApi;
+import com.example.vsokoltsov.estudy.interfaces.OnLoadMoreListener;
 import com.example.vsokoltsov.estudy.models.Course;
 import com.example.vsokoltsov.estudy.models.CoursesList;
 import com.example.vsokoltsov.estudy.util.ApiRequester;
@@ -47,6 +48,7 @@ public class CoursesListFragment extends Fragment implements SearchView.OnQueryT
     private Menu mainMenu;
     private SearchView searchView;
     private SwipeRefreshLayout swipeLayout;
+    private int pageNumber = 1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,22 +57,36 @@ public class CoursesListFragment extends Fragment implements SearchView.OnQueryT
         activity = (ApplicationBaseActivity) getActivity();
         fragmentView = inflater.inflate(R.layout.course_list_fragment, container, false);
         setHasOptionsMenu(true);
-        adapter = new CoursesListAdapter(courses, getActivity());
+
         rv = (RecyclerView) fragmentView.findViewById(R.id.coursesList);
+        setAdapter();
+
         swipeLayout = (SwipeRefreshLayout) fragmentView.findViewById(R.id.swipe_layout);
         rv.setAdapter(adapter);
         rv.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
+
         swipeLayout.setOnRefreshListener(this);
+        
         loadCoursesList();
         return fragmentView;
+    }
+
+    private void setAdapter() {
+        adapter = new CoursesListAdapter(courses, getActivity(), rv, new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                pageNumber++;
+                loadCoursesList();
+            }
+        });
     }
 
     private void loadCoursesList() {
         Retrofit retrofit = api.getRestAdapter();
         CourseApi service = retrofit.create(CourseApi.class);
-        service.loadCourses()
+        service.loadCourses(pageNumber)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<CoursesList>() {

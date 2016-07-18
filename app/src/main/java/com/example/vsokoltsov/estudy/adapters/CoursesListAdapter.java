@@ -2,6 +2,7 @@ package com.example.vsokoltsov.estudy.adapters;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.example.vsokoltsov.estudy.R;
+import com.example.vsokoltsov.estudy.interfaces.OnLoadMoreListener;
 import com.example.vsokoltsov.estudy.models.Course;
 import com.example.vsokoltsov.estudy.view_holders.CourseViewHolder;
 import com.squareup.picasso.Picasso;
@@ -25,9 +27,63 @@ public class CoursesListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private List<Course> orig;
     private Activity activity;
 
+    private final int VISIBLE_THRESHOLD = 5;
+
+    private final int ITEM_VIEW_TYPE_BASIC = 0;
+    private final int ITEM_VIEW_TYPE_FOOTER = 1;
+
+    private int firstVisibleItem, visibleItemCount, totalItemCount, previousTotal = 0;
+    private boolean loading = true;
+
     public CoursesListAdapter(List<Course> courses, Activity activity) {
         this.courses = courses;
         this.activity = activity;
+    }
+
+    public CoursesListAdapter(List<Course> courses, Activity activity, RecyclerView recyclerView,
+                              final OnLoadMoreListener onLoadMoreListener) {
+        this.courses = courses;
+        this.activity = activity;
+
+        onListenerHandler(recyclerView, onLoadMoreListener);
+    }
+
+    private void onListenerHandler(RecyclerView recyclerView,  final OnLoadMoreListener onLoadMoreListener) {
+        if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+            final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+
+                    if (loading) {
+                        if (totalItemCount > previousTotal) {
+                            loading = false;
+                            previousTotal = totalItemCount;
+                        }
+                    }
+                    if (!loading && (totalItemCount - visibleItemCount)
+                            <= (firstVisibleItem + VISIBLE_THRESHOLD) && (totalItemCount != visibleItemCount)) {
+                        // End has been reached
+
+                        addCourse(null);
+                        if (onLoadMoreListener != null) {
+                            onLoadMoreListener.onLoadMore();
+                        }
+                        loading = true;
+                    }
+                }
+            });
+        }
+    }
+
+    public void addCourse(Course course) {
+        if (!courses.contains(course)) {
+            courses.add(course);
+            notifyItemInserted(courses.size() - 1);
+        }
     }
 
     @Override

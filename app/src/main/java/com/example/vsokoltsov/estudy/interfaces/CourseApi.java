@@ -11,7 +11,7 @@ import rx.Observable;
  */
 public interface CourseApi {
     @GET("courses")
-    Observable<CoursesList> loadCourses();
+    Observable<CoursesList> loadCourses(@Query("page") int pageNumber);
 
     @GET("search")
     Observable<CoursesList> searchCourses(
